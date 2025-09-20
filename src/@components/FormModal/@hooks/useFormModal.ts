@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 type ModalPromise<T> = {
   resolve: (value: T) => void;
@@ -7,8 +7,10 @@ type ModalPromise<T> = {
 
 export const useFormModal = <T>() => {
   const [promise, setPromise] = useState<ModalPromise<T>>();
+  const modalRef = useRef<HTMLDialogElement>(null);
 
   const open = useCallback(() => {
+    modalRef.current?.showModal();
     return new Promise((resolve, reject) => {
       setPromise({ resolve, reject });
     });
@@ -16,6 +18,7 @@ export const useFormModal = <T>() => {
 
   const close = () => {
     setPromise(undefined);
+    modalRef.current?.close();
   };
 
   const submit = (form: T) => {
@@ -31,6 +34,7 @@ export const useFormModal = <T>() => {
   return {
     open,
     modalProps: {
+      modalRef,
       isOpen: !!promise,
       submit,
       cancel,

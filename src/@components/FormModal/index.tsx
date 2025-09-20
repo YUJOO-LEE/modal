@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { UseModal } from './@hooks/useFormModal';
+import styles from './index.module.css';
+import { allowScroll, preventScroll } from './@utils';
 
 type Props = UseModal['modalProps'];
 
 export const FormModal = (props: Props) => {
-  const { isOpen, submit, cancel } = props;
+  const { modalRef, isOpen, submit, cancel } = props;
 
   const [form, setForm] = useState('hi');
 
@@ -12,8 +14,16 @@ export const FormModal = (props: Props) => {
     submit(form);
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevScrollY = preventScroll();
+    return () => {
+      allowScroll(prevScrollY);
+    };
+  }, [isOpen]);
+
   return (
-    <dialog open={isOpen}>
+    <dialog ref={modalRef} className={styles.wrapper}>
       <form method="dialog">
         <p>
 

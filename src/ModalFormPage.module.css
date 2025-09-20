@@ -1,0 +1,5 @@
+.wrapper {
+  height: 200dvh;
+  display: grid;
+  place-items: center;
+}
