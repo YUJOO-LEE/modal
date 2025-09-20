@@ -11,7 +11,7 @@ export const useFormModal = <T>() => {
 
   const open = useCallback(() => {
     modalRef.current?.showModal();
-    return new Promise((resolve, reject) => {
+    return new Promise<T>((resolve, reject) => {
       setPromise({ resolve, reject });
     });
   }, []);
@@ -41,4 +41,4 @@ export const useFormModal = <T>() => {
     },
   };
 };
-export type UseModal = ReturnType<typeof useFormModal>;
+export type UseModal<T> = ReturnType<typeof useFormModal<T>>;

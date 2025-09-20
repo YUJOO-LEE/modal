@@ -3,12 +3,12 @@ import type { UseModal } from './@hooks/useFormModal';
 import { allowScroll, preventScroll } from './@utils';
 import styles from './index.module.css';
 
-type Props = UseModal['modalProps'] & {
+type Props<T> = UseModal<T>['modalProps']& {
   title: string;
   description: string;
 };
 
-export const FormModal = (props: React.PropsWithChildren<Props>) => {
+export const FormModal = <T,>(props: React.PropsWithChildren<Props<T>>) => {
   const { title, description, modalRef, isOpen, submit, cancel, children } = props;
 
   const triggerElementRef = useRef<HTMLElement | null>(null);
@@ -19,7 +19,7 @@ export const FormModal = (props: React.PropsWithChildren<Props>) => {
     formData.forEach((value, key) => {
       formObject[key] = value;
     });
-    submit(formObject);
+    submit(formObject as T);
   };
 
   const handleBackdropClick = (event: React.MouseEvent) => {
@@ -47,9 +47,10 @@ export const FormModal = (props: React.PropsWithChildren<Props>) => {
       aria-describedby={description}
       onClick={handleBackdropClick}
     >
-      <h2>
-        {title}
-      </h2>
+      <header>
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </header>
       <form method="dialog" onSubmit={handleSubmit}>
         <div className={styles.content}>
           {children}
