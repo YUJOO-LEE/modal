@@ -33,15 +33,15 @@ const ModalFormPage = () => {
 
       <FormModal title="정보 입력 모달" description="정보를 입력하세요" {...modalProps}>
         <label>
-          <p>Email</p>
+          <p>이메일</p>
           <input name="email" type="email" required />
         </label>
         <label>
-          <p>Name</p>
+          <p>이름</p>
           <input name="name" type="text" required />
         </label>
         <label>
-          <p>Phone (Optional)</p>
+          <p>연락처 (선택)</p>
           <input name="phone" type="tel" />
         </label>
       </FormModal>

@@ -48,16 +48,16 @@ export const FormModal = <T,>(props: React.PropsWithChildren<Props<T>>) => {
       onClick={handleBackdropClick}
     >
       <header>
-        <h2>{title}</h2>
-        <p>{description}</p>
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.description}>{description}</p>
       </header>
       <form method="dialog" onSubmit={handleSubmit}>
         <div className={styles.content}>
           {children}
         </div>
-        <menu>
-          <button type="button" onClick={cancel}>Close</button>
-          <button type="submit" value="Submit">Submit</button>
+        <menu className={styles.action}>
+          <button type="button" className={styles.cancel} onClick={cancel}>취소</button>
+          <button type="submit" className={styles.submit} value="Submit">제출하기</button>
         </menu>
       </form>
     </dialog>
