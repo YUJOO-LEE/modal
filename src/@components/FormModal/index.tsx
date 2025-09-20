@@ -1,36 +1,62 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { UseModal } from './@hooks/useFormModal';
-import styles from './index.module.css';
 import { allowScroll, preventScroll } from './@utils';
+import styles from './index.module.css';
 
-type Props = UseModal['modalProps'];
+type Props = UseModal['modalProps'] & {
+  title: string;
+  description: string;
+};
 
-export const FormModal = (props: Props) => {
-  const { modalRef, isOpen, submit, cancel } = props;
+export const FormModal = (props: React.PropsWithChildren<Props>) => {
+  const { title, description, modalRef, isOpen, submit, cancel, children } = props;
 
-  const [form, setForm] = useState('hi');
+  const triggerElementRef = useRef<HTMLElement | null>(null);
 
-  const handleSubmit = () => {
-    submit(form);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
+    const formObject: Record<string, any> = {};
+    formData.forEach((value, key) => {
+      formObject[key] = value;
+    });
+    submit(formObject);
+  };
+
+  const handleBackdropClick = (event: React.MouseEvent) => {
+    if (event.target !== event.currentTarget) return;
+    cancel();
   };
 
   useEffect(() => {
     if (!isOpen) return;
+    triggerElementRef.current = document.activeElement as HTMLElement;
+
     const prevScrollY = preventScroll();
     return () => {
       allowScroll(prevScrollY);
+      triggerElementRef.current?.focus();
     };
   }, [isOpen]);
 
   return (
-    <dialog ref={modalRef} className={styles.wrapper}>
-      <form method="dialog">
-        <p>
-
-        </p>
+    <dialog
+      ref={modalRef}
+      className={styles.wrapper}
+      aria-modal
+      aria-labelledby={title}
+      aria-describedby={description}
+      onClick={handleBackdropClick}
+    >
+      <h2>
+        {title}
+      </h2>
+      <form method="dialog" onSubmit={handleSubmit}>
+        <div className={styles.content}>
+          {children}
+        </div>
         <menu>
-          <button onClick={cancel}>Close</button>
-          <button onClick={handleSubmit}>Submit</button>
+          <button type="button" onClick={cancel}>Close</button>
+          <button type="submit" value="Submit">Submit</button>
         </menu>
       </form>
     </dialog>
