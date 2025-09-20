@@ -7,6 +7,13 @@
     "noEmit": true,
     "skipLibCheck": true,
     "strict": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "lib": [
+      "decorators",
+      "dom",
+      "es5",
+      "scripthost",
+      "es2015.promise"
+    ]
   }
 }
